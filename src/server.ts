@@ -3,6 +3,7 @@
  * @license MIT
  */
 import config from "@/config";
+import v1Routes from "@/routes/v1";
 import compression from "compression";
 import cookieParser from "cookie-parser";
 import type { CorsOptions } from "cors";
@@ -46,11 +47,7 @@ app.use(limiter);
 
 (async () => {
   try {
-    app.get("/", (req, res) => {
-      res.json({
-        message: "hello world",
-      });
-    });
+    app.use("/api/v1", v1Routes);
 
     app.listen(config.PORT, () => {
       console.log(`Server running: http://localhost:${config.PORT}`);
@@ -63,3 +60,15 @@ app.use(limiter);
     }
   }
 })();
+
+const handleServerShutdown = async () => {
+  try {
+    console.log("Server SHUTDOWN");
+    process.exit(0);
+  } catch (error) {
+    console.log("Error during server shutdown", error);
+  }
+};
+
+process.on("SIGTERM", handleServerShutdown);
+process.on("SIGINT", handleServerShutdown);
