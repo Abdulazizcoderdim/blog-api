@@ -11,6 +11,7 @@ import cors from "cors";
 import express from "express";
 import helmet from "helmet";
 import limiter from "./lib/express_rate_limit";
+import { connectToDatabase, disconnectFromDatabase } from "./lib/mongoose";
 
 const app = express();
 
@@ -47,6 +48,8 @@ app.use(limiter);
 
 (async () => {
   try {
+    await connectToDatabase();
+
     app.use("/api/v1", v1Routes);
 
     app.listen(config.PORT, () => {
@@ -63,6 +66,8 @@ app.use(limiter);
 
 const handleServerShutdown = async () => {
   try {
+    await disconnectFromDatabase();
+
     console.log("Server SHUTDOWN");
     process.exit(0);
   } catch (error) {
