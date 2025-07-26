@@ -1,3 +1,4 @@
+import login from "@/controllers/v1/auth/login";
 import register from "@/controllers/v1/auth/register";
 import validationError from "@/middleware/validationError";
 import user from "@/models/user";
@@ -35,6 +36,6 @@ router.post(
   register
 );
 
-router.post("/login");
+router.post("/login", login);
 
 export default router;
