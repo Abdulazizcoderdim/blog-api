@@ -9,7 +9,7 @@ type UserData = Pick<IUser, "email" | "password">;
 
 const login = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { email, password } = req.body as UserData;
+    const { email } = req.body as UserData;
 
     const user = await User.findOne({ email })
       .select("username email password role")
@@ -28,6 +28,7 @@ const login = async (req: Request, res: Response): Promise<void> => {
     const refreshToken = generateRefreshToken(user._id);
 
     await token.create({ token: refreshToken, userId: user._id });
+
     logger.info("Refresh token created for user", {
       userId: user._id,
       token: refreshToken,
