@@ -86,16 +86,14 @@ const userSchema = new Schema<IUser>(
   }
 );
 
-userSchema.methods.hashPassword = async function (
-  password: string
-): Promise<string> {
-  return await bcrypt.hash(password, 10);
-};
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    next();
+    return;
+  }
 
-userSchema.methods.comparePassword = async function (
-  password: string
-): Promise<boolean> {
-  return await bcrypt.compare(password, this.password);
-};
+  this.password = await bcrypt.hash(this.password, 10);
+  next();
+});
 
 export default model<IUser>("User", userSchema);
