@@ -14,6 +14,8 @@ const config = {
   ACCESS_TOKEN_EXPIRY: process.env.ACCESS_TOKEN_EXPIRY as ms.StringValue,
   REFRESH_TOKEN_EXPIRY: process.env.REFRESH_TOKEN_EXPIRY as ms.StringValue,
   WHITELIST_ADMINS_MAIL: ["abdulazizkxon19@gmail.com", "coderdim2@gmail.com"],
+  defaultResLimit: 20,
+  defaultResOffset: 0,
 };
 
 export default config;

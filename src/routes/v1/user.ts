@@ -7,7 +7,7 @@ import authenticate from "@/middleware/authenticate";
 import validationError from "@/middleware/validationError";
 import User from "@/models/user";
 import { Router } from "express";
-import { body } from "express-validator";
+import { body, query } from "express-validator";
 
 const router = Router();
 
@@ -75,6 +75,20 @@ router.delete(
   deleteCurrentUser
 );
 
-router.get("/", authenticate, authorize(["admin"]), getAllUser);
+router.get(
+  "/",
+  authenticate,
+  authorize(["admin"]),
+  query("limit")
+    .optional()
+    .isInt({ min: 1, max: 50 })
+    .withMessage("Limit must be between 1 to 50"),
+  query("offset")
+    .optional()
+    .isInt({ min: 0 })
+    .withMessage("Offset must be a positive integer"),
+  validationError,
+  getAllUser
+);
 
 export default router;
