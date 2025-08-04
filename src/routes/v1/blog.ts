@@ -1,4 +1,5 @@
 import createBlog from "@/controllers/v1/blog/create_blog";
+import getAllBlogs from "@/controllers/v1/blog/get_all_blogs";
 import authorize from "@/lib/authorize";
 import authenticate from "@/middleware/authenticate";
 import uploadBlogBanner from "@/middleware/uploadBlogBanner";
