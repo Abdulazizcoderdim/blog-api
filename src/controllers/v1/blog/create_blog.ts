@@ -10,7 +10,7 @@ type BlogData = Pick<IBlog, "title" | "content" | "banner" | "status">;
 const window = new JSDOM("").window;
 const purify = DOMPurify(window);
 
-const createBlog = async (res: Response, req: Request) => {
+const createBlog = async (req: Request, res: Response) => {
   try {
     const { title, content, banner, status } = req.body as BlogData;
     const userId = req.userId;
