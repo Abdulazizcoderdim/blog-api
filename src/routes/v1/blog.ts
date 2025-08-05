@@ -1,11 +1,12 @@
 import createBlog from "@/controllers/v1/blog/create_blog";
 import getAllBlogs from "@/controllers/v1/blog/get_all_blogs";
+import getBlogsByUser from "@/controllers/v1/blog/get_blog_by_user";
 import authorize from "@/lib/authorize";
 import authenticate from "@/middleware/authenticate";
 import uploadBlogBanner from "@/middleware/uploadBlogBanner";
 import validationError from "@/middleware/validationError";
 import { Router } from "express";
-import { body, query } from "express-validator";
+import { body, param, query } from "express-validator";
 import multer from "multer";
 
 const upload = multer();
@@ -36,7 +37,7 @@ router.post(
 router.get(
   "/",
   authenticate,
-  authorize(["admin"]),
+  authorize(["admin", "user"]),
   query("limit")
     .optional()
     .isInt({ min: 1, max: 50 })
@@ -47,6 +48,23 @@ router.get(
     .withMessage("Offset must be a positive integer"),
   validationError,
   getAllBlogs
+);
+
+router.get(
+  "/user/:userId",
+  authenticate,
+  authorize(["admin", "user"]),
+  param("userId").isMongoId().withMessage("Invalid user ID"),
+  query("limit")
+    .optional()
+    .isInt({ min: 1, max: 50 })
+    .withMessage("Limit must be between 1 to 50"),
+  query("offset")
+    .optional()
+    .isInt({ min: 0 })
+    .withMessage("Offset must be a positive integer"),
+  validationError,
+  getBlogsByUser
 );
 
 export default router;
