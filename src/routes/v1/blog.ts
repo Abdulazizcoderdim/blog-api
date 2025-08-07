@@ -2,6 +2,7 @@ import createBlog from "@/controllers/v1/blog/create_blog";
 import getAllBlogs from "@/controllers/v1/blog/get_all_blogs";
 import getBlogBySlug from "@/controllers/v1/blog/get_blog_by_slug";
 import getBlogsByUser from "@/controllers/v1/blog/get_blog_by_user";
+import updateBlog from "@/controllers/v1/blog/update_blog";
 import authorize from "@/lib/authorize";
 import authenticate from "@/middleware/authenticate";
 import uploadBlogBanner from "@/middleware/uploadBlogBanner";
@@ -75,6 +76,26 @@ router.get(
   param("slug").notEmpty().withMessage("Slug is required"),
   validationError,
   getBlogBySlug
+);
+
+router.put(
+  "/:blogId",
+  authenticate,
+  authorize(["admin"]),
+  param("blogId").isMongoId().withMessage("Invalid blog ID"),
+  upload.single("banner_image"),
+  body("title")
+    .optional()
+    .isLength({ max: 180 })
+    .withMessage("Title must be less than 180 characters"),
+  body("content"),
+  body("status")
+    .optional()
+    .isIn(["draft", "published"])
+    .withMessage("Status must be one the value, draft or published"),
+  validationError,
+  uploadBlogBanner("put"),
+  updateBlog
 );
 
 export default router;

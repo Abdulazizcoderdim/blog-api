@@ -1,5 +1,6 @@
 import uploadToCloudinary from "@/lib/cloudinary";
 import { logger } from "@/lib/winston";
+import Blog from "@/models/blog";
 import type { UploadApiErrorResponse } from "cloudinary";
 import type { NextFunction, Request, Response } from "express";
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2 mb
@@ -28,12 +29,12 @@ const uploadBlogBanner = (method: "post" | "put") => {
     }
 
     try {
-      // const { blogId } = req.params;
-      // const blog = await Blog.findById(blogId);
+      const { blogId } = req.params;
+      const blog = await Blog.findById(blogId);
 
       const data = await uploadToCloudinary(
-        req.file.buffer
-        // blog?.banner.publicId.replace("blog-api/", "")
+        req.file.buffer,
+        blog?.banner.publicId.replace("blog-api/", "")
       );
 
       if (!data) {
@@ -43,8 +44,8 @@ const uploadBlogBanner = (method: "post" | "put") => {
         });
 
         logger.error("Error while uploading blog banner to cloudinary", {
-          // blogId,
-          // publicId: blog?.banner.publicId,
+          blogId,
+          publicId: blog?.banner.publicId,
         });
         return;
       }
