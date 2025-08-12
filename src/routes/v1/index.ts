@@ -1,5 +1,6 @@
 import authRoutes from "@/routes/v1/auth";
 import blogRoutes from "@/routes/v1/blog";
+import commentRoutes from "@/routes/v1/comment";
 import likeRoutes from "@/routes/v1/like";
 import userRoutes from "@/routes/v1/user";
 import { Router } from "express";
