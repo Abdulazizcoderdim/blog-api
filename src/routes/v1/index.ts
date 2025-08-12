@@ -1,6 +1,6 @@
 import authRoutes from "@/routes/v1/auth";
 import blogRoutes from "@/routes/v1/blog";
-import likeRoute from "@/routes/v1/like";
+import likeRoutes from "@/routes/v1/like";
 import userRoutes from "@/routes/v1/user";
 import { Router } from "express";
 
@@ -19,6 +19,7 @@ router.get("/", (req, res) => {
 router.use("/auth", authRoutes);
 router.use("/users", userRoutes);
 router.use("/blogs", blogRoutes);
-router.use("/likes", likeRoute);
+router.use("/likes", likeRoutes);
+router.use("/comments", commentRoutes);
 
 export default router;
